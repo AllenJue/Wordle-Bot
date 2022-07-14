@@ -81,6 +81,10 @@ public class Gui extends JFrame {
 		setText(bestGuess);
 	}
 	
+	/**
+	 * Sets the GUI text to welcome user and display the best guess
+	 * @param bestGuess current processed best guess by wordle manager
+	 */
 	private void setText(String bestGuess) {
 		if(bestGuess == null) {
 			textArea.setText("Sorry, the word you're looking for doesn't exist! Try again");
