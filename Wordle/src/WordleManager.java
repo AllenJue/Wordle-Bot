@@ -57,6 +57,7 @@ public class WordleManager {
 	 * Helper to create active inventories with an existing dictionary
 	 */
 	private void initializeActiveInventories() {
+		System.out.println(System.getProperty("user.dir"));
 		String nameOfFile = size + "Letter.txt";
 		File letterFile = new File("dictionaries/" + nameOfFile);
 		if(letterFile.length() == 0) {
@@ -241,7 +242,7 @@ public class WordleManager {
 	}
 	
 	/**
-	 * Debugging purposes. Prints remaining size of words
+	 * Debugging purposes. Prints remaining size of in inventory
 	 */
 	public void printRemaining() {
 		System.out.println("Remaining: " + activeInventories.size() + " " + activeInventories);
