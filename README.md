@@ -1,9 +1,11 @@
 # Wordle-Bot
 ## Introduction
-Wordle-Bot is an interactive, user-friendly Wordle solver that takes in feedback from a user's Wordle results to give suggestions for finding a solution.
+Wordle-Bot is an interactive, user-friendly Wordle solver that takes in feedback from a user's Wordle results to give suggestions for finding a solution. It's my approach at making a solver similar to [NYT's Wordle Bot](https://www.nytimes.com/interactive/2022/upshot/wordle-bot.html).
 
 ## Features
 Wordle-Bot has a 6x5 grid, which resembles a Wordle Board. Upon clicking a square, it will toggle between grey, yellow, and green, which correspond with [Wordle's](https://www.nytimes.com/games/wordle/index.html) features of invalid letters, misplaced letters, and correct letters. Typing letters will populate the empty squares for the current row, and pressing enter will attempt the guess. The Wordle-Bot will then process the given information and attempt to narrow down possible answers and provide a calculated guess.
+
+Over thousands of trials, I've found that Wordle-Bot is capable of solving the Wordle about 93.5% of the time in around 4.6 guesses.
 
 Here's an example of the Wordle-Bot in action, where the solution is the word *QUILL*
 ![Wordle-Bot gif](https://user-images.githubusercontent.com/66751933/179063820-62961906-1d3e-4c1b-b89f-4d05985a15b3.gif)
