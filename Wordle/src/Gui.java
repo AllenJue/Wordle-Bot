@@ -35,6 +35,9 @@ public class Gui extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
+//                	WordleManagerTester tester = new WordleManagerTester();
+//                	tester.test(1000);
+//                	tester.printData();
                 	UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
                 	createAndShowGui();
                 } catch (Exception e) {
@@ -95,7 +98,7 @@ public class Gui extends JFrame {
 	 */
 	private void setText(String bestGuess) {
 		if(functionalWordle.gameOver()) {
-			textArea.setText("Game over! Click retry to start over");
+			textArea.setText("Game over! Click reset to start over");
 		} else if(bestGuess == null) {
 			textArea.setText("Sorry, the word you're looking for doesn't exist! Try again");
 		} else {

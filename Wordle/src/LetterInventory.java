@@ -225,7 +225,7 @@ public class LetterInventory implements Comparable<LetterInventory>{
 	public boolean containsIllegalChar(boolean[][] illegalCharacters) {
 		for(int i = 0; i < original.length(); i++) {
 			if(illegalCharacters[i][original.charAt(i) - 'a']) {
-				// System.out.println("Removing: " + original + " because illegal character " + original.charAt(i));
+//				System.out.println("Removing: " + original + " because illegal character " + original.charAt(i));
 				return true;
 			}
 		}
@@ -240,7 +240,7 @@ public class LetterInventory implements Comparable<LetterInventory>{
 	public boolean missingRequired(HashMap<Character, Integer> requiredCharacters) {
 		for(Character c : requiredCharacters.keySet()) {
 			if(requiredCharacters.get(c) > this.get(c)) {
-				// System.out.println("Removing: " + original + " because missing required character " + c);
+//				System.out.println("Removing: " + original + " because missing required character " + c);
 				return true;
 			}
 		}

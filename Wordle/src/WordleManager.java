@@ -56,6 +56,7 @@ public class WordleManager {
 		}
 		activeInventories = new ArrayList<>(activeCopy);
 		possibleAnswers = new ArrayList<>(answerCopy);
+		updateSortedFrequencies();
 		gameOver = false;
 	}
 	
@@ -186,8 +187,9 @@ public class WordleManager {
 		updateInventories(true);
 		updateInventories(false);
 		updateSortedFrequencies();
+//		System.out.println("Remaining characters: " + activeInventories + " " + possibleAnswers);
 		// no answers is game OVER
-		if(possibleAnswers.size() == 0 || !(new String(currentAns).contains("-"))) {
+		if(possibleAnswers.isEmpty() || !(new String(currentAns).contains("-"))) {
 			gameOver = true;
 		}
 	}
