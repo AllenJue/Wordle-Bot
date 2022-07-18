@@ -35,6 +35,9 @@ public class Gui extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
+                	WordleManagerTester test = new WordleManagerTester();
+                	test.test(10000);
+                	System.out.println(test.getWinPercentage() + " avg turns: " + test.getAvgTurns());
                 	UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
                 	createAndShowGui();
                 } catch (Exception e) {

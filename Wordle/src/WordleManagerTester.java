@@ -139,7 +139,7 @@ public class WordleManagerTester {
 	 * @return wins / games
 	 */
 	public double getWinPercentage() {
-		return wins / (games * 1.0);
+		return (wins / (games * 1.0)) * 100;
 	}
 	
 	/**

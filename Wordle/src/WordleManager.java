@@ -13,7 +13,9 @@ public class WordleManager {
 	private int guesses;
 	private int size;
 	private List<LetterInventory> activeInventories;
-	private List<LetterInventory> copy;
+	private List<LetterInventory> possibleAnswers;
+	private List<LetterInventory> activeCopy;
+	private List<LetterInventory> answerCopy;
 	private boolean[][] illegalCharacters;
 	private HashMap<Character, Integer> requiredCharacters;
 	private char[] currentAns;
@@ -26,11 +28,13 @@ public class WordleManager {
 		guesses = 6;
 		size = letters;
 		activeInventories = new ArrayList<>();
+		possibleAnswers = new ArrayList<>();
 		illegalCharacters = new boolean[5][26];
 		requiredCharacters = new HashMap<>();
 		currentAns = new char[] {'-', '-', '-', '-', '-'};
 		initializeActiveInventories();
-		copy = new ArrayList<>(activeInventories);
+		activeCopy = new ArrayList<>(activeInventories);
+		answerCopy = new ArrayList<>(possibleAnswers);
 	}
 	
 	/**
@@ -47,7 +51,8 @@ public class WordleManager {
 		for(int i = 0; i < currentAns.length; i++) {
 			currentAns[i] = '-';
 		}
-		activeInventories = new ArrayList<>(copy);
+		activeInventories = new ArrayList<>(activeCopy);
+		possibleAnswers = new ArrayList<>(answerCopy);
 	}
 	
 	/**
@@ -71,6 +76,7 @@ public class WordleManager {
 			fr = new BufferedReader(new FileReader("dictionaries/wordleAnswers.txt"));
 			line = fr.readLine();
 			while(line != null) {
+				possibleAnswers.add(new LetterInventory(line));
 				activeInventories.add(new LetterInventory(line));
 				line = fr.readLine();
 			}
@@ -132,10 +138,11 @@ public class WordleManager {
 	 * @return activeInventories.get(0).getWord();
 	 */
 	public String getBestGuess() {
-		if(activeInventories.size() == 0) {
+		if(activeInventories.size() == 0 || possibleAnswers.size() == 0) {
 			return null; // no guess
-		}
-		return activeInventories.get(0).getWord();
+		} 
+		// if only one guess, at least guess from answers list
+		return guesses == 1 ? possibleAnswers.get(0).getWord() : activeInventories.get(0).getWord();
 	}
 	
 	/**
@@ -172,7 +179,8 @@ public class WordleManager {
 			}
 		}
 		updateReqCharacters(tempReq);
-		updateActiveInventories();
+		updateActiveInventories(true);
+		updateActiveInventories(false);
 		updateSortedFrequencies();
 	}
 	
@@ -187,10 +195,11 @@ public class WordleManager {
 	}
 
 	/**
-	 * Removes characters from active inventories depending on the current guess
+	 * Removes characters from active inventories or answer list depending on the current guess
+	 * @param answerList if true, update inventory of possible answers
 	 */
-	private void updateActiveInventories() {
-		Iterator<LetterInventory> itr = activeInventories.iterator();
+	private void updateActiveInventories(boolean answerList) {
+		Iterator<LetterInventory> itr = answerList ? possibleAnswers.iterator() : activeInventories.iterator();
 		while(itr.hasNext()) {
 			LetterInventory curInventory = itr.next();
 			// remove if doesn't match correct pattern of correct characters || contains illegal character || missing required letters
