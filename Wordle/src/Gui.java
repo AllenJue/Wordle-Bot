@@ -35,9 +35,6 @@ public class Gui extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                	WordleManagerTester test = new WordleManagerTester();
-                	test.test(10000);
-                	System.out.println(test.getWinPercentage() + " avg turns: " + test.getAvgTurns());
                 	UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
                 	createAndShowGui();
                 } catch (Exception e) {
@@ -97,7 +94,9 @@ public class Gui extends JFrame {
 	 * @param bestGuess current processed best guess by wordle manager
 	 */
 	private void setText(String bestGuess) {
-		if(bestGuess == null) {
+		if(functionalWordle.gameOver()) {
+			textArea.setText("Game over! Click retry to start over");
+		} else if(bestGuess == null) {
 			textArea.setText("Sorry, the word you're looking for doesn't exist! Try again");
 		} else {
 			textArea.setText("<html>Welcome to my Wordle Bot!<br/>Best guess: " 
@@ -219,12 +218,14 @@ public class Gui extends JFrame {
 			 */
 			@Override
 			public void keyTyped(KeyEvent e) {
-				char c = Character.toUpperCase(e.getKeyChar()) ;
-				if(Character.isLetter(c) && curCol < 5) {
-					JButton curButton = squares[curRow][curCol];
-					curCol++;
-					curButton.setText(Character.toString(c));
-				} 
+				if(!functionalWordle.gameOver()) {
+					char c = Character.toUpperCase(e.getKeyChar()) ;
+					if(Character.isLetter(c) && curCol < 5) {
+						JButton curButton = squares[curRow][curCol];
+						curCol++;
+						curButton.setText(Character.toString(c));
+					} 
+				}
 			}
 
 			@Override
@@ -239,15 +240,20 @@ public class Gui extends JFrame {
 			 */
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE && curCol > 0) {
-					curCol--;
-					JButton curButton = squares[curRow][curCol];
-					curButton.setText("");
-				} else if(e.getKeyCode() == KeyEvent.VK_ENTER && curCol == 5) {
-					if(curRow < 6) {
-						processInput();
-						curRow++;
-						curCol = 0;
+				if(!functionalWordle.gameOver()) {
+					if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE && curCol > 0) {
+						curCol--;
+						JButton curButton = squares[curRow][curCol];
+						curButton.setText("");
+					} else if(e.getKeyCode() == KeyEvent.VK_ENTER && curCol == 5) {
+						if(curRow < 6) {
+							processInput();
+							curRow++;
+							curCol = 0;
+						}
+						if(functionalWordle.gameOver()) {
+							setText("");
+						}
 					}
 				}
 			}
@@ -281,38 +287,42 @@ public class Gui extends JFrame {
 				squares[i][j].addMouseListener(new MouseListener() {
 					@Override
 					public void mouseReleased(MouseEvent e) {
-						// TODO Auto-generated method stub
+						// Placeholder
 						
 					}
 					
 					@Override
 					public void mousePressed(MouseEvent e) {
-						// TODO Auto-generated method stub
+						// Placeholder
 						
 					}
 					
 					@Override
 					public void mouseExited(MouseEvent e) {
-						// TODO Auto-generated method stub
+						// Placeholder
 						
 					}
 					
 					@Override
 					public void mouseEntered(MouseEvent e) {
-						// TODO Auto-generated method stub
-						
+						// Placeholder
 					}
 					
+					/**
+					 * Allows for the squares to be toggled between Gray, Yellow, and Green
+					 */
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						JButton button = (JButton) e.getComponent();
-						if(isCorrectRow(button)) {
-							if(button.getBackground() == GRAY) {
-								button.setBackground(YELLOW);
-							} else if(button.getBackground() == YELLOW) {
-								button.setBackground(GREEN);
-							} else {
-								button.setBackground(GRAY);
+						if(!functionalWordle.gameOver()) {
+							JButton button = (JButton) e.getComponent();
+							if(isCorrectRow(button)) {
+								if(button.getBackground() == GRAY) {
+									button.setBackground(YELLOW);
+								} else if(button.getBackground() == YELLOW) {
+									button.setBackground(GREEN);
+								} else {
+									button.setBackground(GRAY);
+								}
 							}
 						}
 					}

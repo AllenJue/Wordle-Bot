@@ -19,6 +19,8 @@ public class WordleManager {
 	private boolean[][] illegalCharacters;
 	private HashMap<Character, Integer> requiredCharacters;
 	private char[] currentAns;
+    private boolean gameOver;
+
 	
 	/**
 	 * Constructor for wordle game. Starts the game with words of length letters
@@ -35,6 +37,7 @@ public class WordleManager {
 		initializeActiveInventories();
 		activeCopy = new ArrayList<>(activeInventories);
 		answerCopy = new ArrayList<>(possibleAnswers);
+		gameOver = false;
 	}
 	
 	/**
@@ -53,6 +56,7 @@ public class WordleManager {
 		}
 		activeInventories = new ArrayList<>(activeCopy);
 		possibleAnswers = new ArrayList<>(answerCopy);
+		gameOver = false;
 	}
 	
 	/**
@@ -138,11 +142,11 @@ public class WordleManager {
 	 * @return activeInventories.get(0).getWord();
 	 */
 	public String getBestGuess() {
-		if(activeInventories.size() == 0 || possibleAnswers.size() == 0) {
+		if(activeInventories.size() == 0 && possibleAnswers.size() == 0) {
 			return null; // no guess
 		} 
 		// if only one guess, at least guess from answers list
-		return guesses == 1 ? possibleAnswers.get(0).getWord() : activeInventories.get(0).getWord();
+		return guesses == 1 || activeInventories.isEmpty() ? possibleAnswers.get(0).getWord() : activeInventories.get(0).getWord();
 	}
 	
 	/**
@@ -179,9 +183,13 @@ public class WordleManager {
 			}
 		}
 		updateReqCharacters(tempReq);
-		updateActiveInventories(true);
-		updateActiveInventories(false);
+		updateInventories(true);
+		updateInventories(false);
 		updateSortedFrequencies();
+		// no answers is game OVER
+		if(possibleAnswers.size() == 0 || !(new String(currentAns).contains("-"))) {
+			gameOver = true;
+		}
 	}
 	
 	/**
@@ -198,7 +206,7 @@ public class WordleManager {
 	 * Removes characters from active inventories or answer list depending on the current guess
 	 * @param answerList if true, update inventory of possible answers
 	 */
-	private void updateActiveInventories(boolean answerList) {
+	private void updateInventories(boolean answerList) {
 		Iterator<LetterInventory> itr = answerList ? possibleAnswers.iterator() : activeInventories.iterator();
 		while(itr.hasNext()) {
 			LetterInventory curInventory = itr.next();
@@ -267,5 +275,12 @@ public class WordleManager {
 			remWords /= WORD_DIVISOR;
 		}
 		return remWords < 2;
+	}
+	
+	/**
+	 * Gets if the game is over
+	 */
+	public boolean gameOver() {
+		return gameOver;
 	}
 }

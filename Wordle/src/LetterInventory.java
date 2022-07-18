@@ -6,6 +6,7 @@ public class LetterInventory implements Comparable<LetterInventory>{
     private int[] freq;
     private int numLetters;
     private int overLaps;
+    
 
     /**
      * Constructor that accepts a String and counts the letters in freq <br>
